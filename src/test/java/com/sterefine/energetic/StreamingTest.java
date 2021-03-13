@@ -1,12 +1,7 @@
 package com.sterefine.energetic;
-
 import com.google.common.collect.Lists;
 import org.junit.Test;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -39,7 +34,7 @@ public class StreamingTest {
 
         Map<Integer, Integer> map2 =
         list.stream()
-                .collect( Collectors.groupingBy(Function.identity(), Collectors.summingInt( o -> o) ));
+                .collect( Collectors.groupingBy(Function.identity(), Collectors.summingInt( o -> o ) ));
         System.out.println(map2);
 
         Map<Integer, List<Integer>> map3 =
@@ -53,6 +48,29 @@ public class StreamingTest {
                                   Collectors.mapping( Function.identity(), Collectors.toSet())
                         ));
         System.out.println(map4);
+
+        Map<Integer, Set<String>> map5 =
+                list.stream()
+                        .collect( Collectors.groupingBy(Function.identity(),
+                                Collectors.mapping( e -> e.toString(), Collectors.toSet() )
+                        ));
+        System.out.println(map5);
+
+        Map<Integer, Map<String, Integer>> map6 =
+                list.stream()
+                        .collect( Collectors.groupingBy(Function.identity(),
+                                Collectors.toMap( e -> e.toString(),
+                                        Function.identity(), (o1,o2) -> o1)
+                        ));
+        System.out.println(map6);
+
+        Map<Integer, Map<String, Integer>> map7 =
+                list.stream()
+                        .collect( Collectors.groupingBy(Function.identity(), LinkedHashMap::new,
+                                Collectors.toMap( e -> e.toString(),
+                                        Function.identity(), (o1,o2) -> o1)
+                        ));
+        System.out.println(map7);
     }
 
     @Test
@@ -72,7 +90,6 @@ public class StreamingTest {
                         (List<Integer> l1, List<Integer> l2) -> {l1.addAll(l2);return l1;});
 
         System.out.println(list2);
-
     }
 
     @Test
